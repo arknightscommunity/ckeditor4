@@ -906,7 +906,7 @@ tendency that these will be moved to the plugins code in the future.
 	border: 1px ridge #bcbcbc;
 	overflow: scroll;
 	height: 200px;
-	width: 300px;
+	width: calc(min(100%, 300px));
 	padding: 2px;
 	background-color: white;
 }

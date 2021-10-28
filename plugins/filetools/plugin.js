@@ -52,6 +52,13 @@
 					configXhrHeaders = editor.config.fileTools_requestHeaders,
 					header;
 
+				// TODO 这是兼容lightsns的上传逻辑修改，需要减少对ckeditor的侵入
+				if (requestData['upload']) {
+				  requestData['file'] = requestData['upload'];
+				  delete requestData['upload'];
+				}
+				// end
+
 				for ( var name in requestData ) {
 					var value = requestData[ name ];
 
@@ -97,6 +104,19 @@
 
 				try {
 					var response = JSON.parse( xhr.responseText );
+
+					// TODO 这是兼容lightsns的上传逻辑修改，需要减少对ckeditor的侵入
+					if (1==1) {
+					  if (response.code != 1) {
+						// An error occurred during upload.
+						data.message = response.msg;
+						evt.cancel();
+					  } else {
+						data.url = response.file_url;
+					  }
+					  return;
+					}
+					// end
 
 					// Error message does not need to mean that upload finished unsuccessfully.
 					// It could mean that ex. file name was changes during upload due to naming collision.

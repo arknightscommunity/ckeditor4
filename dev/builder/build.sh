@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
 # For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 
@@ -91,6 +91,9 @@ fi
 		echo "\n${RED}The build has been stopped. Please verify the eventual error messages above.${RESET_STYLE}"
 	fi
 }
+
+# Copy files
+cp -r ../../bbcode.js release/ckeditor/bbcode.js
 
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then
