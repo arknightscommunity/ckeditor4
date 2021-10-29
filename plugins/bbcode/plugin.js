@@ -2,7 +2,7 @@
  * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
-CKEDITOR.scriptLoader.load("/new/ckeditor/bbcode.js");
+CKEDITOR.scriptLoader.load("/v2-snapshot/ckeditor/bbcode.js");
 (function () {
   CKEDITOR.on("dialogDefinition", function (ev) {
 	var tab,
@@ -88,6 +88,9 @@ CKEDITOR.scriptLoader.load("/new/ckeditor/bbcode.js");
 	  }
 
 	  editor.dataProcessor.toDataFormat = function (html, options) {
+		if (!html) {
+		  return html;
+		}
 		return BBCODE.html2bbcode(html);
 	  };
 
@@ -98,6 +101,9 @@ CKEDITOR.scriptLoader.load("/new/ckeditor/bbcode.js");
 	  }, null, null, 1);
 	  editor.on("toHtml", function (evt) {
 		if (evt.data.context === "wysiwyg-area") {
+		  if (!evt.data.bbcode) {
+			return evt.data.bbcode;
+		  }
 		  evt.data.dataValue = CKEDITOR.htmlParser.fragment.fromHtml(
 			BBCODE.bbcode2html(evt.data.bbcode, true)
 		  );
