@@ -16,7 +16,7 @@
 
 .cke_emoji-panel {
 	width: 310px;
-	height: 300px;
+	height: 241px; /* 300 - 25搜索框 - 34状态栏 */
 	overflow: hidden;
 }
 
@@ -57,7 +57,7 @@
 
 .cke_emoji-inner_panel > nav li {
 	display: inline-block;
-	width: 24px;
+	width: 50px;
 	height: auto;
 	margin: 0 6px;
 	text-align: center;
@@ -72,74 +72,19 @@
 	width: 80%;
 }
 
-.cke_emoji-inner_panel li span {
-	opacity: 0.4;
-}
-
-.cke_emoji-inner_panel li:hover svg, .cke_emoji-inner_panel li:hover span{
-	opacity: 1;
-}
-
 .cke_emoji-inner_panel .active {
 	border-bottom: 5px solid rgba(44, 195, 255, 1);
 }
 
 .cke_emoji-navigation_item span {
-	width: 21px;
+	width: 50px;
 	height: 21px;
 	display: inline-block;
 }
 
-/* SEARCHBOX */
-.cke_emoji-search {
-	position: relative;
-	height: 25px;
-	display: block;
-	border: 1px solid #d1d1d1;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.cke_emoji-search .cke_emoji-search_loupe {
-	position: absolute;
-	top: 6px;
-	left: 6px;
-	display: inline-block;
-	width: 14px;
-	height: 14px;
-	opacity: 0.4;
-}
-
-.cke_rtl .cke_emoji-search .cke_emoji-search_loupe {
-	left: auto;
-	right: 6px;
-}
-
-.cke_emoji-search span {
-    background-repeat: no-repeat;
-    background-position: -60px -15px;
-	background-size: 75px 30px;
-}
-
-.cke_emoji-search input {
-	-webkit-appearance: none;
-	border: none;
-	width: 100%;
-	height: 100%;
-	padding-left: 25px;
-	padding-right: 10px;
-	margin-left: 0
-}
-
-.cke_rtl .cke_emoji-search input {
-	padding-left: 10px;
-	padding-right: 25px;
-	margin-right: 0;
-}
-
 /* EMOJI */
 .cke_emoji-outer_emoji_block {
-	height: 180px;
+	height: 200px;
 	overflow-x: hidden;
 	overflow-y: auto;
 	margin-top: 5px;
@@ -162,74 +107,36 @@
 }
 
 .cke_emoji-item {
-	font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	list-style-type: none;
 	display: inline-table;
-	width: 36px;
-	height: 36px;
+	width: 64px;
+	height: 64px;
 	font-size: 1.8em;
 	text-align: center;
+	border: white 1px solid;
+	box-sizing: border-box;
+}
+.cke_emoji-item img {
+	width: 100%;
+	height: 100%;
 }
 
 .cke_emoji-item:hover {
-	border-radius: 10%;
-	background-color: rgba(44, 195, 255, 0.2);
+	border: #FFC107 1px solid;
 }
 
-.cke_emoji-item > a {
+.cke_emoji-item > img {
 	text-decoration: none;
 	display: table-cell;
 	vertical-align: middle;
 }
 
 .cke_emoji-outer_emoji_block .hidden {
-	display: none
-}
-
-/* STATUS BAR */
-.cke_emoji-status_bar {
-	height: 34px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 3px;
-	margin-top: 3px;
-	border-top: 1px solid #d1d1d1;
-	line-height: 1;
-}
-
-.cke_emoji-status_bar p {
-	margin-top: 3px;
-}
-
-.cke_emoji-status_bar > div {
-	display: inline-block;
-	margin-top: 3px;
-}
-
-.cke_emoji-status_icon {
-	font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-size: 2.2em;
-	float: left;
-	margin-right: 10px;
-}
-
-.cke_rtl .cke_emoji-status_icon {
-	float: right;
-	margin-right: 0px;
-	margin-left: 10px;
+	display: none;
 }
 
 .cke_emoji-panel_block p {
 	margin-bottom: 0;
-}
-
-p.cke_emoji-status_description {
-	font-weight: 600;
-}
-
-p.cke_emoji-status_full_name {
-	font-size: 0.8em;
-	color: #d1d1d1;
 }
 
 .cke_emoji-inner_panel a:focus, .cke_emoji-inner_panel input:focus {

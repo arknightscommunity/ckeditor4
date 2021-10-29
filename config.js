@@ -53,26 +53,8 @@ CKEDITOR.editorConfig = function( config ) {
 	styles: {'font-size': '#(size)'},
 	attributes: {'data-size': '#(size)', 'data-tag': 'size'}
   };
-  var colors_val = "1ABC9C,2ECC71,3498DB,9B59B6,4E5F70,F1C40F,16A085,27AE60,2980B9,8E44AD,2C3E50,F39C12,E67E22,E74C3C,ECF0F1,95A5A6,DDD,FFF,D35400,C0392B,BDC3C7,7F8C8D,999,000";
-  var bgcolors_val = "9BE7D1,96F9B3,A1C4DF,C191D3,8A8A8A,FFF57D,8ECAB9,89DBA0,8EACCB,B57DCA,676767,F7CE75,F0B375,E78D7A,EFEFEF,D3D3D3,ECECEC,FFFFFF,EE8E56,E27A67,F5F5F5,B9B9B9,CACACA,2C2C2C";
-  // TODO 通过修改colorButton源码让他支持背景色单独定义
-  Object.defineProperty(config, 'colorButton_colors', {
-	get: function () {
-	  if (event) {
-		var e = event.target;
-		if (e && e.classList) {
-		  if (e.classList.contains('cke_button__bgcolor_icon')) {
-			return bgcolors_val;
-		  }
-		}
-	  }
-	  return colors_val;
-	},
-	set: function (val) {
-	  colors_val = val;
-	},
-	configurable: true,
-  });
+  config.colorButton_bgcolors = "9BE7D1,96F9B3,A1C4DF,C191D3,8A8A8A,FFF57D,8ECAB9,89DBA0,8EACCB,B57DCA,676767,F7CE75,F0B375,E78D7A,EFEFEF,D3D3D3,ECECEC,FFFFFF,EE8E56,E27A67,F5F5F5,B9B9B9,CACACA,2C2C2C";
+  config.colorButton_colors = "1ABC9C,2ECC71,3498DB,9B59B6,4E5F70,F1C40F,16A085,27AE60,2980B9,8E44AD,2C3E50,F39C12,E67E22,E74C3C,ECF0F1,95A5A6,DDD,FFF,D35400,C0392B,BDC3C7,7F8C8D,999,000";
   config.linkDefaultProtocol = 'https://';
   config.enterMode = CKEDITOR.ENTER_BR;
   config.shiftEnterMode = CKEDITOR.ENTER_BR;
@@ -81,12 +63,70 @@ CKEDITOR.editorConfig = function( config ) {
   config.basicEntities = false;
   config.extraAllowedContent = 'h4[*]{*}(*);span[*]{*}(*);div[*]{*}(*);p[*]{*}(*)';
   // TODO 这里大概得用绝对路径？
-  config.filebrowserImageUploadUrl = '/wp-content/themes/LightSNS/module/upload/bbs.php?from=ckeditor';
+  config.emoji_emojiListUrl = 'https://arknightscommunity.drblack-system.com/wp-content/themes/LightSNS/module/stencil/smile.php';
+  config.filebrowserImageUploadUrl = 'https://arknightscommunity.drblack-system.com/wp-content/themes/LightSNS/module/upload/bbs.php?from=ckeditor';
 };
+
+function resetUploadAction(editor) {
+  editor.on('fileUploadRequest', function (evt) {
+	// Prevented the default behavior.
+	evt.stop();
+
+	var fileLoader = evt.data.fileLoader,
+	  $formData = new FormData(),
+	  requestData = evt.data.requestData,
+	  configXhrHeaders = editor.config.fileTools_requestHeaders,
+	  header;
+
+	if (requestData['upload']) {
+	  requestData['file'] = requestData['upload'];
+	  delete requestData['upload'];
+	}
+	for (var name in requestData) {
+	  var value = requestData[name];
+
+	  // Treating files in special way
+	  if (typeof value === 'object' && value.file) {
+		$formData.append(name, value.file, value.name);
+	  } else {
+		$formData.append(name, value);
+	  }
+	}
+	// Append token preventing CSRF attacks.
+	$formData.append('ckCsrfToken', CKEDITOR.tools.getCsrfToken());
+
+	if (configXhrHeaders) {
+	  for (header in configXhrHeaders) {
+		fileLoader.xhr.setRequestHeader(header, configXhrHeaders[header]);
+	  }
+	}
+
+	fileLoader.xhr.send($formData);
+  });
+  editor.on('fileUploadResponse', function (evt) {
+	// Prevent the default response handler.
+	evt.stop();
+
+	// Get XHR and response.
+	var data = evt.data,
+	  xhr = data.fileLoader.xhr,
+	  response = JSON.parse(xhr.responseText);
+
+	if (response.code != 1) {
+	  // An error occurred during upload.
+	  data.message = response.msg;
+	  evt.cancel();
+	} else {
+	  data.url = response.file_url;
+	}
+  });
+}
+
 CKEDITOR.on('instanceReady', function (e) {
   if (e.editor.contextMenu) {
 	e.editor.removeMenuItem('paste');
   }
+  resetUploadAction(e.editor);
 });
 
 // %LEAVE_UNMINIFIED% %REMOVE_LINE%

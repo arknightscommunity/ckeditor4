@@ -93,7 +93,7 @@ fi
 }
 
 # Copy files
-cp -r ../../bbcode.js release/ckeditor/bbcode.js
+cp -r release/ckeditor/bbcode_js release/ckeditor/bbcode.js
 
 # Copy and build tests.
 if [[ "$ARGS" == *\ \-t\ * ]]; then

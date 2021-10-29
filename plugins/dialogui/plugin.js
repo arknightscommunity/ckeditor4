@@ -1423,7 +1423,10 @@ CKEDITOR.plugins.add( 'dialogui', {
 						size = elementDefinition.size - ( CKEDITOR.env.ie ? 7 : 0 ); // "Browse" button is bigger in IE.
 
 					var inputId = _.frameId + '_input';
-
+			        var inputAccept = '';
+					if (elementDefinition.accept) {
+					  inputAccept = '" accept="' + elementDefinition.accept + '"';
+					}
 					frameDocument.$.write( [
 						'<html dir="' + langDir + '" lang="' + langCode + '"><head><title></title></head><body style="margin: 0; overflow: hidden; background: transparent;">',
 							'<form enctype="multipart/form-data" method="POST" dir="' + langDir + '" lang="' + langCode + '" action="',
@@ -1436,6 +1439,7 @@ CKEDITOR.plugins.add( 'dialogui', {
 								// Set width to make sure that input is not clipped by the iframe (https://dev.ckeditor.com/ticket/11253).
 								'<input style="width:100%" id="', inputId, '" aria-labelledby="', _.labelId, '" type="file" name="',
 									CKEDITOR.tools.htmlEncode( elementDefinition.id || 'cke_upload' ),
+					  				inputAccept,
 									'" size="',
 									CKEDITOR.tools.htmlEncode( size > 0 ? size : '' ),
 								'" />',

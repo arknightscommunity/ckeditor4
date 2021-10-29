@@ -207,7 +207,7 @@ Special outer level classes used in this file:
 	display: block;
 	height: 100%;
 	overflow: auto;
-	padding: 0 8px;
+	padding: 5px 8px;
 	outline-style: none;
 
 	box-sizing: border-box;

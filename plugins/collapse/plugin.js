@@ -5,8 +5,7 @@ CKEDITOR.plugins.add("collapse", {
 	editor.widgets.add("Collapse", {
 	  buttonToolbar: "insert,14",
 	  button: "添加折叠文本",
-	  allowedContent:
-		"collapse;div[data-tag]{*}(collapse,collapse-title,collapse-content);span;b",
+	  allowedContent: "collapse;div[data-tag]{*}(collapse,collapse-title,collapse-content);span;b",
 	  requiredContent: "collapse",
 	  draggable: false,
 	  template: '<div data-tag="collapse" class="collapse"><span>折叠标题：</span><div class="collapse-title">点击展开</div><span>折叠内容：</span><div class="collapse-content"></div></div>',

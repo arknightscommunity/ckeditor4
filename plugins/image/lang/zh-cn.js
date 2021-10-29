@@ -5,7 +5,7 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 CKEDITOR.plugins.setLang( 'image', 'zh-cn', {
 	alt: '替换文本',
 	border: '边框大小',
-	btnUpload: '上传到服务器',
+	btnUpload: '选择完毕后 点此上传到服务器',
 	button2Img: '确定要把当前图像按钮转换为普通图像吗？',
 	hSpace: '水平间距',
 	img2Button: '确定要把当前图像改变为图像按钮吗？',

@@ -174,7 +174,8 @@
 					// @param {Function} callback The filter function which should return `true` if a matching color is found.
 					// @param {String} callback.color The color compared by the filter function.
 					select: function( callback ) {
-						var colors = config.colorButton_colors.split( ',' ),
+					  var configColors = name === 'BGColor' ? config.colorButton_bgcolors : config.colorButton_colors;
+						var colors = configColors.split( ',' ),
 							color = CKEDITOR.tools.array.find( colors, callback );
 
 						color = ColorBox.normalizeColor( color );
@@ -187,7 +188,7 @@
 						panelBlock = block;
 						block.autoSize = true;
 						block.element.addClass( 'cke_colorblock' );
-						block.element.setHtml( renderColors( colorBoxId, clickFn, history ? history.getLength() : 0 ) );
+						block.element.setHtml( renderColors( name, colorBoxId, clickFn, history ? history.getLength() : 0 ) );
 
 						// The block should not have scrollbars (https://dev.ckeditor.com/ticket/5933, https://dev.ckeditor.com/ticket/6056)
 						block.element.getDocument().getBody().setStyle( 'overflow', 'hidden' );
@@ -359,9 +360,10 @@
 				}
 			}
 
-			function renderColors( colorBoxId, clickFn, historyLength ) {
+			function renderColors( name, colorBoxId, clickFn, historyLength ) {
+			  var configColors = name === 'BGColor' ? config.colorButton_bgcolors : config.colorButton_colors;
 				var output = [],
-					colors = config.colorButton_colors.split( ',' ),
+					colors = configColors.split( ',' ),
 					// Tells if we should include "More Colors..." button.
 					moreColorsEnabled = editor.plugins.colordialog && config.colorButton_enableMore,
 					// aria-setsize and aria-posinset attributes are used to indicate size of options, because

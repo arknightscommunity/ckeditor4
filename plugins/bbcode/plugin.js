@@ -2,6 +2,7 @@
  * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
+CKEDITOR.scriptLoader.load("/new/ckeditor/bbcode.js");
 (function () {
   CKEDITOR.on("dialogDefinition", function (ev) {
 	var tab,
@@ -60,10 +61,6 @@
 	  // Since CKEditor 4.3.0, editor#(active)enterMode is set before
 	  // beforeInit. Properties got to be updated (https://dev.ckeditor.com/ticket/11202).
 	  editor.activeEnterMode = editor.enterMode = CKEDITOR.ENTER_BR;
-
-	  if (typeof BBCODE === 'undefined') {
-		CKEDITOR.scriptLoader.load(CKEDITOR.getUrl("/new/ckeditor/bbcode.js"));
-	  }
 	},
 	init: function init(editor) {
 	  editor.dataProcessor.htmlFilter.addRules({
@@ -100,7 +97,7 @@
 		evt.data.bbcode = evt.data.dataValue;
 	  }, null, null, 1);
 	  editor.on("toHtml", function (evt) {
-		if (evt.data.context === "body") {
+		if (evt.data.context === "wysiwyg-area") {
 		  evt.data.dataValue = CKEDITOR.htmlParser.fragment.fromHtml(
 			BBCODE.bbcode2html(evt.data.bbcode, true)
 		  );

@@ -1078,7 +1078,8 @@
 						id: 'upload',
 						label: editor.lang.image.btnUpload,
 						style: 'height:40px',
-						size: 38
+						size: 38,
+					    accept: 'image/*'
 					},
 					{
 						type: 'fileButton',
