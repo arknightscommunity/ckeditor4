@@ -12,14 +12,19 @@ CKEDITOR.plugins.add( 'panelbutton', {
 			if ( _.state == CKEDITOR.TRISTATE_DISABLED )
 				return;
 
-			this.createPanel( editor );
-
-			if ( _.on ) {
-				_.panel.hide();
-				return;
+			var promise = this.createPanel( editor );
+			if (!promise) {
+			  promise = Promise.resolve();
 			}
 
-			_.panel.showBlock( this._.id, this.document.getById( this._.id ), 4 );
+			promise.then(function() {
+			  if (_.on) {
+				_.panel.hide();
+				return;
+			  }
+
+			  _.panel.showBlock(_.id, this.document.getById(_.id), 4);
+			});
 		}
 
 		/**
@@ -78,9 +83,24 @@ CKEDITOR.plugins.add( 'panelbutton', {
 					var panelDefinition = this._.panelDefinition,
 						panelBlockDefinition = this._.panelDefinition.block,
 						panelParentElement = panelDefinition.parent || CKEDITOR.document.getBody(),
-						panel = this._.panel = new CKEDITOR.ui.floatPanel( editor, panelParentElement, panelDefinition ),
-						block = panel.addBlock( _.id, panelBlockDefinition ),
-						me = this,
+						panel = this._.panel = new CKEDITOR.ui.floatPanel( editor, panelParentElement, panelDefinition );
+					var serviceWorkerPromise = new Promise(function (reslove) {
+					  var sw = panel.element.$.firstChild.contentWindow.navigator.serviceWorker;
+					  if (sw) {
+						sw.ready.then(function () {
+						  reslove();
+						});
+						setTimeout(function () {
+						  reslove();
+						}, 200);
+					  } else {
+						reslove();
+					  }
+					});
+					var blockPromise = serviceWorkerPromise.then(function () {
+					  return panel.addBlock(_.id, panelBlockDefinition);
+					});
+				    var me = this,
 						command = editor.getCommand( this.command );
 
 					panel.onShow = function() {
@@ -123,20 +143,22 @@ CKEDITOR.plugins.add( 'panelbutton', {
 						me.document.getById( _.id ).focus();
 					};
 
-					if ( this.onBlock ) {
-						this.onBlock( panel, block );
-					}
+					return blockPromise.then(function(block) {
+					  if (this.onBlock) {
+						this.onBlock(panel, block);
+					  }
 
-					block.onHide = function() {
+					  block.onHide = function () {
 						_.on = 0;
 
 						// Defined `modes` has priority over the command for a backward compatibility (#3727).
-						if ( !me.modes && me.command ) {
-							me.setStateFromCommand( command );
+						if (!me.modes && me.command) {
+						  me.setStateFromCommand(command);
 						} else {
-							me.setState( CKEDITOR.TRISTATE_OFF );
+						  me.setState(CKEDITOR.TRISTATE_OFF);
 						}
-					};
+					  };
+					});
 				},
 
 				setStateFromCommand: function( command ) {

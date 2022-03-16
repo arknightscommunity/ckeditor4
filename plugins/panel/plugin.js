@@ -182,7 +182,7 @@
 						'(' + CKEDITOR.tools.fixDomain + ')();' +
 						'document.close();'
 					) + '}())' :
-					'';
+					'/iframe-compatible.txt';
 
 				data.frame = frameTpl.output( {
 					id: this.id + '_frame',
