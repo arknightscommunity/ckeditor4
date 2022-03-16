@@ -1180,76 +1180,81 @@
 		},
 
 		// (#4761)
+		'test buildStyleHtml returns relative URL for passed relative URL string': function() {
+			var relativeUrl = '/file.css',
+				styledStringElem = CKEDITOR.tools.buildStyleHtml( relativeUrl );
+
+			assert.areSame( -1, styledStringElem.indexOf( 'http' ), 'http should not be present in relative URL' );
+		},
+
+		// (#4761)
+		'test buildStyleHtml returns absolute URL for passed absolute URL string': function() {
+			var relatedUrl = 'http://example.com/file.css',
+				styledStringElem = CKEDITOR.tools.buildStyleHtml( relatedUrl ),
+				httpPosition = styledStringElem.indexOf( 'http' );
+
+			assert.isTrue( httpPosition > -1 , 'Absolute URL missed http protocol' );
+		},
+
+		// (#4761)
+		'test buildStyleHtml returns passed style text embedded in style element': function() {
+			var styleText = '*{color:red}',
+				expected = '<style>' + styleText + '</style>',
+				styledStringElem = CKEDITOR.tools.buildStyleHtml( styleText );
+
+			assert.areSame( expected, styledStringElem, 'Styled text was not exact same wrapped in style element' );
+		},
+
+		// (#4761)
 		'test buildStyleHtml with no timestamp returns stylesheet URL without cache key for passed string': function() {
 			var originalTimestamp = CKEDITOR.timestamp,
-				url = '/file.css',
-				expectedHref = 'href="' + url + '"',
+				relativeUrl = '/file.css',
+				expectedHref = 'href="' + relativeUrl + '"',
 				html;
 
 			CKEDITOR.timestamp = '';
-			html = CKEDITOR.tools.buildStyleHtml( url ),
-			CKEDITOR.timestamp = originalTimestamp;
+			html = CKEDITOR.tools.buildStyleHtml( relativeUrl );
+			var expectedPosition = html.indexOf( expectedHref );
 
-			assert.areNotSame( -1, html.indexOf( expectedHref ), 'Built HTML includes correct stylesheet link' );
+			CKEDITOR.timestamp = originalTimestamp;
+			assert.isTrue( expectedPosition > -1, 'Built HTML does not contains expected href attribute' );
 		},
 
 		// (#4761)
-		'test buildStyleHtml with set timestamp returns stylesheet URL with cache key for passed string': function() {
+		'test buildStyleHtml adds timestamp as cache key to provided URL': function() {
 			var originalTimestamp = CKEDITOR.timestamp,
-				newTimestamp = 'wer55',
-				url = '/file.css',
-				expectedHref = 'href="' + url + '?t=' + newTimestamp + '"',
+				relativeUrl = '/file.css',
+				fakeTimestamp = 'cke4',
+				expectedHref = 'href="' + relativeUrl + '?t=' + fakeTimestamp + '"',
 				html;
 
-			CKEDITOR.timestamp = newTimestamp;
-			html = CKEDITOR.tools.buildStyleHtml( url ),
-			CKEDITOR.timestamp = originalTimestamp;
+			CKEDITOR.timestamp = fakeTimestamp;
+			html = CKEDITOR.tools.buildStyleHtml( relativeUrl );
+			var expectedPosition = html.indexOf( expectedHref );
 
-			assert.areNotSame( -1, html.indexOf( expectedHref ), 'Built HTML includes correct stylesheet link' );
+			CKEDITOR.timestamp = originalTimestamp;
+			assert.isTrue( expectedPosition > -1, 'Built HTML does not contains expected href with timestamp' );
 		},
 
 		// (#4761)
-		'test buildStyleHtml with no timestamp returns stylesheet URLs without cache key for passed array': function() {
+		'test buildStyleHtml adds timestamp as cache key to provided URLs': function() {
 			var originalTimestamp = CKEDITOR.timestamp,
-				urls = [
-					'/file.css',
-					'/some-other-file'
-				],
+				relativeUrls = [ '/file.css', '../file2.css' ],
+				fakeTimestamp = 'cke4',
 				expectedHrefs = [
-					'href="' + urls[ 0 ] + '"',
-					'href="' + urls[ 1 ] + '"'
+					'href="' + relativeUrls[ 0 ] + '?t=' + fakeTimestamp + '"',
+					'href="' + relativeUrls[ 1 ] + '?t=' + fakeTimestamp + '"'
 				],
 				html;
 
-			CKEDITOR.timestamp = '';
-			html = CKEDITOR.tools.buildStyleHtml( urls ),
+			CKEDITOR.timestamp = fakeTimestamp;
+			html = CKEDITOR.tools.buildStyleHtml( relativeUrls );
+
 			CKEDITOR.timestamp = originalTimestamp;
 
 			CKEDITOR.tools.array.forEach( expectedHrefs, function( expectedHref ) {
-				assert.areNotSame( -1, html.indexOf( expectedHref ), 'Built HTML includes correct stylesheet link' );
-			} );
-		},
-
-		// (#4761)
-		'test buildStyleHtml with set timestamp returns stylesheet URLs with cache key for passed array': function() {
-			var originalTimestamp = CKEDITOR.timestamp,
-				newTimestamp = 'wer55',
-				urls = [
-					'/file.css',
-					'/some-other-file'
-				],
-				expectedHrefs = [
-					'href="' + urls[ 0 ] + '?t=' + newTimestamp + '"',
-					'href="' + urls[ 1 ] + '?t=' + newTimestamp + '"'
-				],
-				html;
-
-			CKEDITOR.timestamp = newTimestamp;
-			html = CKEDITOR.tools.buildStyleHtml( urls ),
-			CKEDITOR.timestamp = originalTimestamp;
-
-			CKEDITOR.tools.array.forEach( expectedHrefs, function( expectedHref ) {
-				assert.areNotSame( -1, html.indexOf( expectedHref ), 'Built HTML includes correct stylesheet link' );
+				var expectedPosition = html.indexOf( expectedHref );
+				assert.isTrue( expectedPosition > -1, 'Built HTML does not contains expected hrefs with timestamp' );
 			} );
 		}
 	} );

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -994,13 +994,44 @@
 	// This function produces very complicated regex code. Using IIFE ensures that the regex
 	// is build only once for this module.
 	removeReservedKeywords = ( function() {
-		var encodedKeywordRegex = createEncodedKeywordRegex(),
-			sourceKeywordRegex = createSourceKeywordRegex();
+		var regexes = [
+			createEncodedKeywordRegex(),
+			createSourceKeywordRegex(),
+			createIncorrectCommentRegex()
+		];
 
 		return function( data ) {
-			return data.replace( encodedKeywordRegex, '' )
-				.replace( sourceKeywordRegex, '' );
+			while( isContentMatchingAnyPattern( regexes, data ) ) {
+				data = removeMatchingContent( regexes, data );
+			}
+
+			return data;
 		};
+
+		function isContentMatchingAnyPattern( regexes, data ) {
+			for ( var i = 0; i < regexes.length; i++ ) {
+				var regex = regexes[ i ];
+
+				regex.lastIndex = 0;
+
+				if ( regex.test( data ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		function removeMatchingContent( regexes, data ) {
+			for ( var i = 0; i < regexes.length; i++ ) {
+				data = data.replace( regexes[ i ], '' );
+			}
+			return data;
+		}
+
+		function createIncorrectCommentRegex() {
+			return /<!(?:\s*-\s*){2,3}!?\s*>/g;
+		}
 
 		// Produces regex matching `cke:encoded` element.
 		function createEncodedKeywordRegex() {

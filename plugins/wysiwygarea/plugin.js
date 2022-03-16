@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -85,6 +85,11 @@
 					}
 				} );
 
+				editor.on( 'destroy', function() {
+					if ( mutationObserver ) {
+						mutationObserver.disconnect();
+					}
+				} );
 
 				iframe.setAttributes( {
 					tabIndex: editor.tabIndex,
@@ -135,7 +140,9 @@
 
 				function observeEditor() {
 					mutationObserver = new MutationObserver( function( mutationsList ) {
-						CKEDITOR.tools.array.forEach( mutationsList, verifyIfAddsNodesWithEditor );
+						for ( var index = 0; index < mutationsList.length; index++ ) {
+							verifyIfAddsNodesWithEditor( mutationsList[ index ] );
+						}
 					} );
 
 					mutationObserver.observe( editor.config.observableParent, { childList: true, subtree: true } );
@@ -146,7 +153,9 @@
 						return;
 					}
 
-					CKEDITOR.tools.array.forEach( mutation.addedNodes, checkIfAffectsEditor );
+					for ( var index = 0; index < mutation.addedNodes.length; index++ ) {
+						checkIfAffectsEditor( mutation.addedNodes[ index ] );
+					}
 				}
 
 				function checkIfAffectsEditor( node ) {

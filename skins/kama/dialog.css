@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 
@@ -272,6 +272,11 @@ a.cke_dialog_tab_selected
 	border-width: 3px;
 }
 
+/* #4934 */
+.cke_hc a.cke_dialog_tab:focus {
+	text-decoration: underline;
+}
+
 a.cke_dialog_tab_disabled
 {
 	color: #bababa;
@@ -355,7 +360,8 @@ div.cke_disabled .cke_dialog_ui_labeled_content *
 /* (#3433) */
 .cke_dialog_ui_labeled_required
 {
-	color: red;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 /*

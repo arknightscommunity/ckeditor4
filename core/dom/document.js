@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -40,12 +40,10 @@ CKEDITOR.tools.extend( CKEDITOR.dom.document.prototype, {
 	 *
 	 *		CKEDITOR.document.appendStyleSheet( '/mystyles.css' );
 	 *
-	 * **Note:** URLs are passed through {@link CKEDITOR#getUrl} function.
-	 *
 	 * @param {String} cssFileUrl The CSS file URL.
 	 */
 	appendStyleSheet: function( cssFileUrl ) {
-		cssFileUrl = CKEDITOR.getUrl( cssFileUrl );
+		cssFileUrl = CKEDITOR.appendTimestamp( cssFileUrl );
 
 		if ( this.$.createStyleSheet )
 			this.$.createStyleSheet( cssFileUrl );

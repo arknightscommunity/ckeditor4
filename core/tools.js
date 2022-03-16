@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -414,7 +414,7 @@
 		 * Builds a HTML snippet from a set of `<style>/<link>`.
 		 *
 		 * @param {String/Array} css Each of which are URLs (absolute) of a CSS file or
-		 * a trunk of style text. URLs are passed through {@link CKEDITOR#getUrl} function.
+		 * a trunk of style text.
 		 * @returns {String}
 		 */
 		buildStyleHtml: function( css ) {
@@ -424,11 +424,10 @@
 			for ( var i = 0; i < css.length; i++ ) {
 				if ( ( item = css[ i ] ) ) {
 					// Is CSS style text ?
-					if ( /@import|[{}]/.test( item ) )
+					if ( /@import|[{}]/.test( item ) ) {
 						retval.push( '<style>' + item + '</style>' );
-					else {
-						item = CKEDITOR.getUrl( item );
-
+					} else {
+						item = CKEDITOR.appendTimestamp( item );
 						retval.push( '<link type="text/css" rel=stylesheet href="' + item + '">' );
 					}
 				}

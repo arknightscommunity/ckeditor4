@@ -1,6 +1,6 @@
 {
 	"name": "ckeditor4-dev",
-	"version": "4.17.0",
+	"version": "4.17.2",
 	"description": "The development version of CKEditor - JavaScript WYSIWYG web text editor.",
 	"devDependencies": {
 		"benderjs": "^0.4.6",
@@ -22,7 +22,7 @@
 		"less": "^3.8.0",
 		"lesshat": "^4.1.0",
 		"replace-in-file": "^6.1.0",
-		"shelljs": "^0.8.2",
+		"shelljs": "^0.8.5",
 		"uglify-js": "^3.12.0"
 	},
 	"scripts": {
