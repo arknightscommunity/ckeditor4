@@ -2,7 +2,9 @@
  * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
-CKEDITOR.scriptLoader.load("/v2-snapshot/ckeditor/bbcode.js");
+if (typeof BBCODE === 'undefined') {
+  CKEDITOR.scriptLoader.load("/v2-snapshot/ckeditor/bbcode.js");
+}
 (function () {
   CKEDITOR.on("dialogDefinition", function (ev) {
 	var tab,
@@ -101,12 +103,11 @@ CKEDITOR.scriptLoader.load("/v2-snapshot/ckeditor/bbcode.js");
 	  }, null, null, 1);
 	  editor.on("toHtml", function (evt) {
 		if (evt.data.context === "wysiwyg-area") {
-		  if (!evt.data.bbcode) {
-			return evt.data.bbcode;
+		  if (evt.data.bbcode) {
+			evt.data.dataValue = CKEDITOR.htmlParser.fragment.fromHtml(
+			  BBCODE.bbcode2html(evt.data.bbcode, true)
+			);
 		  }
-		  evt.data.dataValue = CKEDITOR.htmlParser.fragment.fromHtml(
-			BBCODE.bbcode2html(evt.data.bbcode, true)
-		  );
 		}
 	  }, null, null, 5);
 	  var autoBreakWidgets = ["Code", "Collapse", "Dice", "Notice", "Video", "Audio"];

@@ -50,7 +50,7 @@ CKEDITOR.editorConfig = function( config ) {
   };
   config.fontSize_style = {
 	element: 'span',
-	styles: {'font-size': '#(size)'},
+	styles: {'font-size': '#(size)', 'line-height': '#(size)'},
 	attributes: {'data-size': '#(size)', 'data-tag': 'size'}
   };
   config.colorButton_bgcolors = "9BE7D1,96F9B3,A1C4DF,C191D3,8A8A8A,FFF57D,8ECAB9,89DBA0,8EACCB,B57DCA,676767,F7CE75,F0B375,E78D7A,EFEFEF,D3D3D3,ECECEC,FFFFFF,EE8E56,E27A67,F5F5F5,B9B9B9,CACACA,2C2C2C";
